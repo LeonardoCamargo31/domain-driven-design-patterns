@@ -21,9 +21,16 @@ describe('Order unit tests', () => {
   })
 
   it('should calculate total', () => {
-    const item1 = new OrderItem('123', 'product1', 100)
-    const item2 = new OrderItem('123', 'product2', 200)
+    const item1 = new OrderItem('123', 'product1', 100, '1', 2)
+    const item2 = new OrderItem('123', 'product2', 200, '2', 2)
     const order = new Order('123', '123', [item1, item2])
-    expect(order.total()).toBe(300)
+    expect(order.total()).toBe(600)
+  })
+
+  it('should check if the item qtd is greater than 0', () => {
+    expect(() => {
+      const item = new OrderItem('123', 'product1', 100, '1', 0)
+      const order = new Order('123', '123', [item])
+    }).toThrowError('item quantity must be greater than 0')
   })
 })

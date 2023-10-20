@@ -34,6 +34,10 @@
   },
   "dependencies": {
     "dotenv": "^8.2.0",
+    "reflect-metadata": "^0.1.13",
+    "sequelize": "^6.33.0",
+    "sequelize-typescript": "^2.1.5",
+    "sqlite3": "^5.1.6",
     "uuid": "^9.0.1"
   }
 }

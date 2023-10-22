@@ -51,6 +51,11 @@ export class Customer {
     this.validate()
   }
 
+  changeAddress (address: Address): void {
+    this._address = address
+    this.validate()
+  }
+
   activate (): void {
     if (!this._address) {
       throw new Error('address is mandatory to activate a customer')

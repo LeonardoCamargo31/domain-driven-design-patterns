@@ -38,10 +38,6 @@ export class Customer {
     return this._address
   }
 
-  set address (address: Address) {
-    this._address = address
-  }
-
   isActive (): boolean {
     return this._active
   }

@@ -27,7 +27,7 @@ describe('Customer repository test', () => {
     const customerRepository = new CustomerRepository()
     const customer = new Customer('123', 'customer 1')
     const address = new Address('street 1', 1, 'zip 1', 'city 1', 'state 1')
-    customer.address = address
+    customer.changeAddress(address)
     await customerRepository.create(customer)
 
     const customerModel = await CustomerModel.findOne({ where: { id: '123' } })
@@ -36,7 +36,7 @@ describe('Customer repository test', () => {
       id: '123',
       name: customer.name,
       active: customer.isActive(),
-      rewardPoints: customer.rewardPoints,
+      reward_points: customer.rewardPoints,
       street: address.street,
       number: address.number,
       zip: address.zip,
@@ -49,7 +49,7 @@ describe('Customer repository test', () => {
     const customerRepository = new CustomerRepository()
     const customer = new Customer('123', 'customer 1')
     const address = new Address('street 1', 1, 'zip 1', 'city 1', 'state 1')
-    customer.address = address
+    customer.changeAddress(address)
     await customerRepository.create(customer)
 
     customer.changeName('customer 2')
@@ -60,7 +60,7 @@ describe('Customer repository test', () => {
       id: '123',
       name: customer.name,
       active: customer.isActive(),
-      rewardPoints: customer.rewardPoints,
+      reward_points: customer.rewardPoints,
       street: address.street,
       number: address.number,
       zip: address.zip,
@@ -73,7 +73,7 @@ describe('Customer repository test', () => {
     const customerRepository = new CustomerRepository()
     const customer = new Customer('123', 'customer 1')
     const address = new Address('street 1', 1, 'zip 1', 'city 1', 'state 1')
-    customer.address = address
+    customer.changeAddress(address)
     await customerRepository.create(customer)
 
     const customerResult = await customerRepository.find(customer.id)
@@ -93,13 +93,13 @@ describe('Customer repository test', () => {
     const customerRepository = new CustomerRepository()
     const customer1 = new Customer('123', 'Customer 1')
     const address1 = new Address('street 1', 1, 'zip 1', 'city 1', 'state 1')
-    customer1.address = address1
+    customer1.changeAddress(address1)
     customer1.addRewardPoints(10)
     customer1.activate()
 
     const customer2 = new Customer('456', 'Customer 2')
     const address2 = new Address('street 2', 2, 'zip 2', 'city 2', 'state 2')
-    customer2.address = address2
+    customer2.changeAddress(address2)
     customer2.addRewardPoints(20)
 
     await customerRepository.create(customer1)

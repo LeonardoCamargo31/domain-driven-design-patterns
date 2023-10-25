@@ -28,7 +28,7 @@ export class ProductRepository implements ProductRepositoryInterface {
     })
 
     return new Product(
-      productModel.id as string,
+      productModel.id,
       productModel.name,
       productModel.price
     )
@@ -38,7 +38,7 @@ export class ProductRepository implements ProductRepositoryInterface {
     const productModels = await ProductModel.findAll()
     return productModels.map(productModel =>
       new Product(
-        productModel.id as string,
+        productModel.id,
         productModel.name,
         productModel.price
       )

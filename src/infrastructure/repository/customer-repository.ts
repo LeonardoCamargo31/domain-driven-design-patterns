@@ -14,7 +14,7 @@ export default class CustomerRepository implements CustomerRepositoryInterface {
       city: entity.address.city,
       state: entity.address.state,
       active: entity.isActive(),
-      rewardPoints: entity.rewardPoints
+      reward_points: entity.rewardPoints
     })
   }
 
@@ -28,7 +28,7 @@ export default class CustomerRepository implements CustomerRepositoryInterface {
         city: entity.address.city,
         state: entity.address.state,
         active: entity.isActive(),
-        rewardPoints: entity.rewardPoints
+        reward_points: entity.rewardPoints
       },
       {
         where: {
@@ -66,8 +66,8 @@ export default class CustomerRepository implements CustomerRepositoryInterface {
     const customerModels = await CustomerModel.findAll()
 
     const customers = customerModels.map((customerModels) => {
-      const customer = new Customer(customerModels.id as string, customerModels.name)
-      customer.addRewardPoints(customerModels.rewardPoints)
+      const customer = new Customer(customerModels.id, customerModels.name)
+      customer.addRewardPoints(customerModels.reward_points)
       const address = new Address(
         customerModels.street,
         customerModels.number,

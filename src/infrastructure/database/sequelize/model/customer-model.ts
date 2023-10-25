@@ -7,7 +7,7 @@ import { Column, Model, PrimaryKey, Table } from 'sequelize-typescript'
 export class CustomerModel extends Model {
   @PrimaryKey
   @Column
-  declare id: String
+  declare id: string
 
   @Column({
     allowNull:false
@@ -47,5 +47,5 @@ export class CustomerModel extends Model {
   @Column({
     allowNull:false
     })
-  declare rewardPoints: number
+  declare reward_points: number
 }

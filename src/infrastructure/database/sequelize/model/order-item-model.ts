@@ -1,6 +1,5 @@
 import { BelongsTo, Column, ForeignKey, Model, PrimaryKey, Table } from 'sequelize-typescript'
 import { ProductModel } from './product-model'
-import { OrderItem } from '../../../../domain/entity/order-item'
 import { OrderModel } from './order-model'
 
 @Table({
@@ -26,13 +25,13 @@ export class OrderItemModel extends Model {
 
   // caso queira todos os dados da order
   @BelongsTo(() => OrderModel)
-  declare order: OrderItem
+  declare order: OrderModel
 
   @Column({ allowNull:false })
   declare quantity: number
 
   @Column({ allowNull:false })
-  declare name: number
+  declare name: string
 
   @Column({ allowNull:false })
   declare price: number

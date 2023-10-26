@@ -12,8 +12,8 @@ import { OrderItem } from '../../domain/entity/order-item'
 import { Order } from '../../domain/entity/order'
 import OrderRepository from './order-repository'
 
-const makeCustomer = (): Customer => {
-  const customer = new Customer('c1', 'customer 1')
+const makeCustomer = (id: string, name: string): Customer => {
+  const customer = new Customer(id, name)
   const address = new Address('Street 1', 123, '12345-678', 'São Paulo', 'SP')
   customer.changeAddress(address)
   return customer
@@ -44,7 +44,7 @@ describe('Order repository test', () => {
 
   it('should create a new order', async () => {
     const customerRepository = new CustomerRepository()
-    const customer = makeCustomer()
+    const customer = makeCustomer('c1', 'customer 1')
     await customerRepository.create(customer)
 
     const productRepository = new ProductRepository()
@@ -76,27 +76,201 @@ describe('Order repository test', () => {
     })
   })
 
-  it('should throw an error when calling the update method', async () => {
-    const customerRepository = new CustomerRepository()
-    const customer = makeCustomer()
-    await customerRepository.create(customer)
+  describe('update', () => {
+    it('should change order customer', async () => {
+      const customerRepository = new CustomerRepository()
+      const customer = makeCustomer('c1', 'customer 1')
+      await customerRepository.create(customer)
 
-    const productRepository = new ProductRepository()
-    const product = makeProduct()
-    await productRepository.create(product)
+      const productRepository = new ProductRepository()
+      const product = makeProduct()
+      await productRepository.create(product)
 
-    const item = new OrderItem('i1', product.name, product.price, product.id, 2)
-    const order = new Order('o1', customer.id, [item])
-    const orderRepository = new OrderRepository()
+      const item = new OrderItem('i1', product.name, product.price, product.id, 2)
+      const order = new Order('o1', customer.id, [item])
+      const orderRepository = new OrderRepository()
+      await orderRepository.create(order)
 
-    void expect(async () => {
+      const orderModel = await OrderModel.findOne({
+        where: { id: order.id },
+        include: ['items']
+      })
+
+      expect(orderModel.toJSON()).toStrictEqual({
+        id: order.id,
+        customer_id: customer.id,
+        total: order.total(),
+        items: [{
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          order_id: order.id,
+          product_id: item.productId
+        }]
+      })
+
+      // change customer
+      const customer2 = makeCustomer('c2', 'customer 2')
+      await customerRepository.create(customer2)
+      order.changeCustomer(customer2.id)
       await orderRepository.update(order)
-    }).rejects.toThrow('method not implemented')
+
+      const orderUpdatedModel = await OrderModel.findOne({
+        where: { id: order.id },
+        include: ['items']
+      })
+
+      expect(orderUpdatedModel.toJSON()).toStrictEqual({
+        id: order.id,
+        customer_id: customer2.id,
+        total: order.total(),
+        items: [{
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          order_id: order.id,
+          product_id: item.productId
+        }]
+      })
+    })
+
+    it('should add a new item to order', async () => {
+      const customerRepository = new CustomerRepository()
+      const customer = makeCustomer('c1', 'customer 1')
+      await customerRepository.create(customer)
+
+      const productRepository = new ProductRepository()
+      const product = makeProduct()
+      await productRepository.create(product)
+
+      const item = new OrderItem('i1', product.name, product.price, product.id, 2)
+      const order = new Order('o1', customer.id, [item])
+      const orderRepository = new OrderRepository()
+      await orderRepository.create(order)
+
+      const orderModel = await OrderModel.findOne({
+        where: { id: order.id },
+        include: ['items']
+      })
+
+      expect(orderModel.toJSON()).toStrictEqual({
+        id: order.id,
+        customer_id: customer.id,
+        total: order.total(),
+        items: [{
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          order_id: order.id,
+          product_id: item.productId
+        }]
+      })
+
+      // add new item
+      const item2 = new OrderItem('i2', product.name, product.price, product.id, 2)
+      order.addItem(item2)
+      await orderRepository.update(order)
+
+      const orderUpdatedModel = await OrderModel.findOne({
+        where: { id: order.id },
+        include: ['items']
+      })
+
+      expect(orderUpdatedModel.toJSON()).toStrictEqual({
+        id: order.id,
+        customer_id: customer.id,
+        total: order.total(),
+        items: [{
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          order_id: order.id,
+          product_id: item.productId
+        }, {
+          id: item2.id,
+          name: item2.name,
+          price: item2.price,
+          quantity: item2.quantity,
+          order_id: order.id,
+          product_id: item2.productId
+        }]
+      })
+    })
+
+    it('should remove an item from the order', async () => {
+      const customerRepository = new CustomerRepository()
+      const customer = makeCustomer('c1', 'customer 1')
+      await customerRepository.create(customer)
+
+      const productRepository = new ProductRepository()
+      const product = makeProduct()
+      await productRepository.create(product)
+
+      const item1 = new OrderItem('i1', product.name, product.price, product.id, 2)
+      const item2 = new OrderItem('i2', product.name, product.price, product.id, 2)
+
+      const order = new Order('o1', customer.id, [item1, item2])
+      const orderRepository = new OrderRepository()
+      await orderRepository.create(order)
+
+      const orderModel = await OrderModel.findOne({
+        where: { id: order.id },
+        include: ['items']
+      })
+
+      expect(orderModel.toJSON()).toStrictEqual({
+        id: order.id,
+        customer_id: customer.id,
+        total: order.total(),
+        items: [{
+          id: item1.id,
+          name: item1.name,
+          price: item1.price,
+          quantity: item1.quantity,
+          order_id: order.id,
+          product_id: item1.productId
+        }, {
+          id: item2.id,
+          name: item2.name,
+          price: item2.price,
+          quantity: item2.quantity,
+          order_id: order.id,
+          product_id: item2.productId
+        }]
+      })
+
+      // remove  item
+      order.removeItem(item2.id)
+      await orderRepository.update(order)
+
+      const orderUpdatedModel = await OrderModel.findOne({
+        where: { id: order.id },
+        include: ['items']
+      })
+
+      expect(orderUpdatedModel.toJSON()).toStrictEqual({
+        id: order.id,
+        customer_id: customer.id,
+        total: order.total(),
+        items: [{
+          id: item1.id,
+          name: item1.name,
+          price: item1.price,
+          quantity: item1.quantity,
+          order_id: order.id,
+          product_id: item1.productId
+        }]
+      })
+    })
   })
 
   it('should find a order', async () => {
     const customerRepository = new CustomerRepository()
-    const customer = makeCustomer()
+    const customer = makeCustomer('c1', 'customer 1')
     await customerRepository.create(customer)
 
     const productRepository = new ProductRepository()
@@ -122,7 +296,7 @@ describe('Order repository test', () => {
 
   it('should find all orders', async () => {
     const customerRepository = new CustomerRepository()
-    const customer = makeCustomer()
+    const customer = makeCustomer('c1', 'customer 1')
     await customerRepository.create(customer)
 
     const productRepository = new ProductRepository()

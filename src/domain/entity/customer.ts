@@ -2,10 +2,10 @@ import { Address } from './address'
 
 export class Customer {
   private readonly _id: string
-  private _name: string=''
+  private _name: string = ''
   private _address: Address
-  private _active: boolean=false
-  private _rewardPoints: number=0
+  private _active: boolean = false
+  private _rewardPoints: number = 0
 
   constructor (id: string, name: string) {
     this._id = id

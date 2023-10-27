@@ -5,14 +5,14 @@ import { OrderModel } from './order-model'
 @Table({
   tableName: 'order_items',
   timestamps: false
-  })
+})
 export class OrderItemModel extends Model {
   @PrimaryKey
   @Column
   declare id: string
 
   @ForeignKey(() => ProductModel)
-  @Column({ allowNull:false })
+  @Column({ allowNull: false })
   declare product_id: string
 
   // caso queira todos os dados do produto
@@ -20,19 +20,19 @@ export class OrderItemModel extends Model {
   declare product: ProductModel
 
   @ForeignKey(() => OrderModel)
-  @Column({ allowNull:false })
+  @Column({ allowNull: false })
   declare order_id: string
 
   // caso queira todos os dados da order
   @BelongsTo(() => OrderModel)
   declare order: OrderModel
 
-  @Column({ allowNull:false })
+  @Column({ allowNull: false })
   declare quantity: number
 
-  @Column({ allowNull:false })
+  @Column({ allowNull: false })
   declare name: string
 
-  @Column({ allowNull:false })
+  @Column({ allowNull: false })
   declare price: number
 }

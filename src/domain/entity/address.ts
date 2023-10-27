@@ -1,9 +1,9 @@
 export class Address {
-  street: string=''
-  number: number =0
-  zip: string=''
-  city: string=''
-  state: string=''
+  street: string = ''
+  number: number = 0
+  zip: string = ''
+  city: string = ''
+  state: string = ''
 
   constructor (street: string, number: number, zip: string, city: string, state: string) {
     this.street = street

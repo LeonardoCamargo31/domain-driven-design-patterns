@@ -3,9 +3,9 @@ import { CustomerModel } from './customer-model'
 import { OrderItemModel } from './order-item-model'
 
 @Table({
-  tableName: "orders",
-  timestamps: false,
-  })
+  tableName: 'orders',
+  timestamps: false
+})
 export class OrderModel extends Model {
   @PrimaryKey
   @Column

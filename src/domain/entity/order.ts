@@ -3,7 +3,7 @@ import { OrderItem } from './order-item'
 export class Order {
   private readonly _id: string
   private _customerId: string
-  private _items: OrderItem[]=[]
+  private _items: OrderItem[] = []
   private readonly _total: number
 
   constructor (id: string, customerId: string, items: OrderItem[]) {

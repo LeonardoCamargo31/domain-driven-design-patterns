@@ -3,49 +3,49 @@ import { Column, Model, PrimaryKey, Table } from 'sequelize-typescript'
 @Table({
   tableName: 'customers',
   timestamps: false
-  })
+})
 export class CustomerModel extends Model {
   @PrimaryKey
   @Column
   declare id: string
 
   @Column({
-    allowNull:false
-    })
+    allowNull: false
+  })
   declare name: string
 
   @Column({
-    allowNull:false
-    })
+    allowNull: false
+  })
   declare street: string
 
   @Column({
-    allowNull:false
-    })
+    allowNull: false
+  })
   declare number: number
 
   @Column({
-    allowNull:false
-    })
+    allowNull: false
+  })
   declare zip: string
 
   @Column({
-    allowNull:false
-    })
+    allowNull: false
+  })
   declare city: string
 
   @Column({
-    allowNull:false
-    })
+    allowNull: false
+  })
   declare state: string
 
   @Column({
-    allowNull:false
-    })
+    allowNull: false
+  })
   declare active: boolean
 
   @Column({
-    allowNull:false
-    })
+    allowNull: false
+  })
   declare reward_points: number
 }

@@ -3,7 +3,7 @@ import { EventHandlerInterface } from './event-handler-interface'
 import { EventInterface } from './event-interface'
 
 export class EventDispatcher implements EventDispatcherInterface {
-  private readonly eventHandlers: { [eventName: string]: EventHandlerInterface[] } = {}
+  private eventHandlers: { [eventName: string]: EventHandlerInterface[] } = {}
 
   get getEventHandlers (): { [eventName: string]: EventHandlerInterface[] } {
     return this.eventHandlers
@@ -16,7 +16,18 @@ export class EventDispatcher implements EventDispatcherInterface {
     this.eventHandlers[eventName].push(eventHandler)
   }
 
-  unregister: (eventName: string, eventHandler: EventHandlerInterface<EventInterface>) => void
-  unregisterAll: () => void
+  unregister (eventName: string, eventHandler: EventHandlerInterface<EventInterface>): void {
+    if (this.eventHandlers[eventName]) {
+      const index = this.eventHandlers[eventName].indexOf(eventHandler)
+      if (index !== -1) {
+        this.eventHandlers[eventName].splice(index, 1)
+      }
+    }
+  }
+
+  unregisterAll (): void {
+    this.eventHandlers = {}
+  }
+
   notify: (event: EventInterface) => void
 }
